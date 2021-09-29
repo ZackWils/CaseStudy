@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HelpdeskDAL\HelpdeskDAL.csproj" />
+    <ProjectReference Include="..\HelpDeskViewModels\HelpDeskViewModels.csproj" />
   </ItemGroup>
 
 </Project>

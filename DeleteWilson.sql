@@ -1,0 +1,1 @@
+﻿DELETE FROM Employees WHERE LastName = 'Wilson'
