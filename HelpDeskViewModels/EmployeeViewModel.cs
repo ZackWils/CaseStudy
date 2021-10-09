@@ -53,11 +53,11 @@ namespace HelpDeskViewModels
             catch (NullReferenceException nex)
             {
                 Debug.WriteLine(nex.Message);
-                Lastname = "not found";
+                Email = "not found";
             }
             catch (Exception ex)
             {
-                Lastname = "not found";
+                Email = "not found";
                 Debug.WriteLine("Problem in " + GetType().Name + " " + MethodBase.GetCurrentMethod().Name + " " + ex.Message);
                 throw;
             }
@@ -173,7 +173,10 @@ namespace HelpDeskViewModels
                 }
 
                 emp.Timer = Convert.FromBase64String(Timer);
-                EmployeeUpdated = await _dao.Update(emp);
+                if (await _dao.Update(emp) == UpdateStatus.Ok)
+                {
+                    EmployeeUpdated = 1;
+                }
             }
             catch (Exception ex)
             {

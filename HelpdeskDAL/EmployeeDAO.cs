@@ -9,13 +9,17 @@ namespace HelpdeskDAL
 {
     public class EmployeeDAO
     {
+        readonly IRepository<Employee> repository;
+        public EmployeeDAO()
+        {
+            repository = new HelpdeskRepository<Employee>();
+        }
         public async Task<Employee> GetByEmail(String email)
         {
-            Employee selectedEmployee = null;
+            Employee selectedEmployee;
             try
             {
-                HelpdeskContext _db = new HelpdeskContext();
-                selectedEmployee = await _db.Employees.FirstOrDefaultAsync(emp => emp.Email == email);
+                selectedEmployee = await repository.GetOne(emp => emp.Email == email);
             }
             catch (Exception ex)
             {
@@ -28,12 +32,11 @@ namespace HelpdeskDAL
 
         public async Task<Employee> GetById(int id)
         {
-            Employee selectedEmployee = null;
+            Employee selectedEmployee;
 
             try
             {
-                HelpdeskContext _db = new HelpdeskContext();
-                selectedEmployee = await _db.Employees.FirstOrDefaultAsync(emp => emp.Id == id);
+                selectedEmployee = await repository.GetOne(emp => emp.Id == id);
             }
             catch (Exception ex)
             {
@@ -45,11 +48,10 @@ namespace HelpdeskDAL
 
         public async Task<List<Employee>> GetAll()
         {
-            List<Employee> allEmployees = new List<Employee>();
+            List<Employee> allEmployees;
             try
             {
-                HelpdeskContext _db = new HelpdeskContext();
-                allEmployees = await _db.Employees.ToListAsync();
+                allEmployees = await repository.GetAll();
             }
             catch (Exception ex)
             {
@@ -63,9 +65,7 @@ namespace HelpdeskDAL
         {
             try
             {
-                HelpdeskContext _db = new HelpdeskContext();
-                await _db.Employees.AddAsync(newEmployee);
-                await _db.SaveChangesAsync();
+                await repository.Add(newEmployee);
             }
             catch (Exception ex)
             {
@@ -75,22 +75,19 @@ namespace HelpdeskDAL
             return newEmployee.Id;
         }
 
-        public async Task<int> Update(Employee updatedEmployee)
+        public async Task<UpdateStatus> Update(Employee updatedEmployee)
         {
-            int EmployeesUpdated = -1;
+            UpdateStatus EmployeeUpdated = UpdateStatus.Failed;
             try
             {
-                HelpdeskContext _db = new HelpdeskContext();
-                Employee currentEmployee = await _db.Employees.FirstOrDefaultAsync(emp => emp.Id == updatedEmployee.Id);
-                _db.Entry(currentEmployee).CurrentValues.SetValues(updatedEmployee);
-                EmployeesUpdated = await _db.SaveChangesAsync();
+                EmployeeUpdated = await repository.Update(updatedEmployee);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Problem in " + GetType().Name + " " + MethodBase.GetCurrentMethod().Name + " " + ex.Message);
                 throw;
             }
-            return EmployeesUpdated;
+            return EmployeeUpdated;
         }
 
         public async Task<int> Delete(int id)
@@ -98,10 +95,7 @@ namespace HelpdeskDAL
             int EmployeesDeleted = -1;
             try
             {
-                HelpdeskContext _db = new HelpdeskContext();
-                Employee selectedEmployee = await _db.Employees.FirstOrDefaultAsync(emp => emp.Id == id);
-                _db.Employees.Remove(selectedEmployee);
-                EmployeesDeleted = await _db.SaveChangesAsync();
+                EmployeesDeleted = await repository.Delete(id);
             }
             catch (Exception ex)
             {

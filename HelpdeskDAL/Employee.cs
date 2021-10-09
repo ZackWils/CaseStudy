@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace HelpdeskDAL
 {
-    public partial class Employee
+    public partial class Employee : HelpDeskEntity
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -16,7 +15,6 @@ namespace HelpdeskDAL
         public int DepartmentId { get; set; }
         public bool? IsTech { get; set; }
         public byte[] StaffPicture { get; set; }
-        public byte[] Timer { get; set; }
 
         public virtual Department Department { get; set; }
     }
