@@ -154,7 +154,7 @@ namespace HelpDeskViewModels
 
         public async Task<int> Update()
         {
-            int EmployeeUpdated = -1;
+            UpdateStatus status = UpdateStatus.Failed;
             try
             {
                 Employee emp = new Employee
@@ -173,17 +173,14 @@ namespace HelpDeskViewModels
                 }
 
                 emp.Timer = Convert.FromBase64String(Timer);
-                if (await _dao.Update(emp) == UpdateStatus.Ok)
-                {
-                    EmployeeUpdated = 1;
-                }
+                status = await _dao.Update(emp);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Problem in " + GetType().Name + " " + MethodBase.GetCurrentMethod().Name + " " + ex.Message);
                 throw;
             }
-            return EmployeeUpdated;
+            return Convert.ToInt16(status);
         }
 
         public async Task<int> Delete()

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Case 1 - Home</title>
+    <title>Case 1 - Employee</title>
     <link href="lib/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,59 +25,62 @@
         </div>
         <a class="navbar-text ms-auto">v1.0</a>
     </nav>
-    <div class="text-center">
+    <div class="justify-content-center align-items-center row mt-5 ml-1">
         <img src="img/hideThePain.jpg" class="img-fluid rounded-3" alt="Responsive image" style="max-width:25%">
 
-        <h1>Help Desk</h1>
-        <h6>v1.0</h6>
-        <button type="button" class="btn btn-outline-secondary m-2" data-bs-toggle="modal" data-bs-target="#lookupModal">lookup employee</button>
+        <div class="col-12 text-center p-3"><h1>Employees</h1></div>
+
+        <div class="col-12 text-center p-3"><h6>V1.0</h6></div>
+        <div class="list-group col-10" id="employeeList"></div>
     </div>
 
-    <div class="modal fade" id="lookupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title" id="staticBackdropLabel"></h2>
+                    <h2 class="modal-title" id="myModalLabel"></h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mx-4 my-4">
                         <div class="card">
                             <div class="card-header text-center">
                                 Employee Information
                             </div>
-                            <div class="card-body p-0 m1-1">
+                            <div class="card-body">
                                 <div class="row">
-                                    <div class="col-3" style="font-weight:bold;">Title</div>
-                                    <div cass="col-2 text-left" id="title"></div>
-                                    <div class="col-3 text-right" style="font-weight:bold;">First:</div>
-                                    <div class="col-4 text-left" id="firstname"></div>
+                                    <div class="col-4">Title:</div>
+                                    <div class="col-8"><input type="text" placeholder="enter title" id="TextBoxTitle" class="form-control" /></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3" style="font-weight:bold;">Phone</div>
-                                    <div class="col-8 text-left" id="phone"></div>
+                                    <div class="col-4">First:</div>
+                                    <div class="col-8"><input type="text" placeholder="enter first name" id="TextBoxFirstname" class="form-control" /></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3" style="font-weight:bold;">Last</div>
-                                    <div class="col-8 text-left" id="last"></div>
+                                    <div class="col-4">Surname:</div>
+                                    <div class="col-8"><input type="text" placeholder="enter last name" id="TextBoxLastname" class="form-control" /></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-3" style="font-weight:bold;">Email</div>
-                                    <div class="col-8">
-                                        <input type="text" placeholder="enter email" id="TextBoxEmail" class="form-control my-2" />
-                                    </div>
+                                    <div class="col-4">Phone#:</div>
+                                    <div class="col-8"><input type="text" placeholder="enter phone#" id="TextBoxPhone" class="form-control" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">Email:</div>
+                                    <div class="col-8"><input type="text" placeholder="enter email address" id="TextBoxEmail" class="form-control" /></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <input type="button" value="Find Employee" id="getbutton" />
-                            <div id="status" class="text-center mt-3 mb-2"></div>
-                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <input type="button" class="btn btn-secondary" value="update" id="actionbutton" />
+                        <div id="modalstatus" class="text-left mt-3 mb-2"></div>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
-    <script src="lib/js/bootstrap.min.js"></script>
     <script src="lib/js/jquery.min.js"></script>
-    <script src="js/employeelookup.js"></script>
+    <script src="lib/js/bootstrap.min.js"></script>
+    <script src="js/employee.js"></script>
 </body>
 </html>

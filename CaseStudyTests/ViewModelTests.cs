@@ -117,6 +117,30 @@ namespace CaseStudyTests
             Assert.True(EmployeesDeleted > 0);
         }
 
+        [Fact]
+        public async Task Employee_ConcurrencyTest()
+        {
+            int employeesUpdated = -1;
+
+            try
+            {
+                EmployeeViewModel vm1 = new EmployeeViewModel { Email = "zachariwils@gmail.com" };
+                EmployeeViewModel vm2 = new EmployeeViewModel { Email = "zachariwils@gmail.com" };
+                await vm1.GetByEmail(); //Student just added
+                await vm2.GetByEmail(); //Student just added
+                vm1.Phoneno = vm1.Phoneno == "(519)636-9225" ? "555-555-5555" : "(519)636-9225";
+                if (await vm1.Update() == 1)
+                {
+                    vm2.Phoneno = "(666)666-6666"; // just need any value
+                    employeesUpdated = await vm2.Update();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error - " + ex.Message);
+            }
+            Assert.True(employeesUpdated == -2);
+        }
 
     }
 }
