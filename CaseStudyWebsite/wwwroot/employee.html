@@ -7,8 +7,8 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<body class="bg-dark" style="overflow-x: hidden;">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
         <a class="navbar-brand mx-3" href="#">Case #1</a>
         <button class="navbar-toggler mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
             <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
         </div>
         <a class="navbar-text ms-auto">v1.0</a>
     </nav>
-    <div class="justify-content-center align-items-center row mt-5 ml-1">
+    <div class="justify-content-center align-items-center row mt-5 ml-1 text-light">
         <img src="img/hideThePain.jpg" class="img-fluid rounded-3" alt="Responsive image" style="max-width:25%">
 
         <div class="col-12 text-center p-3"><h1>Employees</h1></div>
@@ -68,11 +68,16 @@
                                     <div class="col-4">Email:</div>
                                     <div class="col-8"><input type="text" placeholder="enter email address" id="TextBoxEmail" class="form-control" /></div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-4">Department:</div>
+                                    <div class="col-8"><select id="ddlDepartments" name="ddlDepartments" class="form-select" /></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer text-center">
-                        <input type="button" class="btn btn-secondary" value="update" id="actionbutton" />
+                        <input type="button" class="btn btn-secondary mt-3" value="update" id="actionbutton" />
+                        <input type="button" class="btn btn-secondary mt-3" value="delete" id="deletebutton" name="deletebutton" />
                         <div id="modalstatus" class="text-left mt-3 mb-2"></div>
                     </div>
                 </div>

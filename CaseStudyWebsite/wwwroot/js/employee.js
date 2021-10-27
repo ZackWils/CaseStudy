@@ -14,12 +14,24 @@
             } else {//else 404 not found
                 $("#status").text("no such path on server");
             }
+
+            response = await fetch(`api/department`);
+            if (response.ok) {
+                let deps = await response.json(); //this returns a promise, so we await it
+                sessionStorage.setItem("alldepartments", JSON.stringify(deps));
+            } else if (response.staus !== 404) {
+                let problemJson = await response.json();
+                errorRtn(problemJson, response.status);
+            } else {
+                $("#status").text("no such path on server");
+            } //else
         } catch (error) {
             $("#status").text(error.message);
         }
     }; //getAll
 
     const setupForUpdate = (id, data) => {
+        $("#deletebutton").show();
         $("#actionbutton").val("update");
         $("#modaltitle").html("<h4>update employee</h4>");
 
@@ -35,6 +47,7 @@
                 sessionStorage.setItem("departmentId", employee.departmentId);
                 sessionStorage.setItem("timer", employee.timer);
                 $("#modalstatus").text("update data");
+                loadDepartmentDDL(employee.departmentId);
                 $("#myModal").modal("toggle");
                 $("#myModalLabel").text("Update");
             } //if
@@ -42,6 +55,7 @@
     }; //setupForUpdate
 
     const setupForAdd = () => {
+        $("#deletebutton").hide();
         $("#actionbutton").val("add");
         $("#modaltitle").html("<h4>add employee</h4>");
         $("#myModal").modal("toggle");
@@ -52,6 +66,7 @@
 
 
     const clearModalFields = () => {
+        loadDepartmentDDL(-1);
         $("#TextBoxTitle").val("");
         $("#TextBoxFirstname").val("");
         $("#TextBoxLastname").val("");
@@ -62,6 +77,15 @@
         sessionStorage.removeItem("timer");
     }; //clearModalFields
 
+    const loadDepartmentDDL = (empdep) => {
+        html = '';
+        $('#ddlDepartments').empty();
+        let alldepartments = JSON.parse(sessionStorage.getItem('alldepartments'));
+        alldepartments.map(dep => html += `<option value="${dep.id}">${dep.name}</option>`);
+        $('#ddlDepartments').append(html);
+        $('#ddlDepartments').val(empdep);
+    }; //loadDivisionDDL
+
     const add = async () => {
         try {
             emp = new Object();
@@ -70,7 +94,7 @@
             emp.lastname = $("#TextBoxLastname").val();
             emp.phoneno = $("#TextBoxPhone").val();
             emp.email = $("#TextBoxEmail").val();
-            emp.departmentId = 100; //hard code it for now, we'll add a dropdown later
+            emp.departmentId = parseInt($("#ddlDepartments").val()); //hard code it for now, we'll add a dropdown later
             emp.id = -1;
             emp.timer = null;
             emp.picture64 = null;
@@ -99,6 +123,25 @@
         $("#myModal").modal("toggle");
     }; //add
 
+
+    const _delete = async () => {
+        try {
+            let response = await fetch(`api/employee/${sessionStorage.getItem('id')}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json; charset=utf-8' }
+            });
+            if (response.ok) {
+                let data = await response.json();
+                getAll(data.msg);
+            } else {
+                $('#status').text(`Status - $(response.status}, Problem on delete server side, see server console`);
+            }
+            $('#myModal').modal('toggle');
+        } catch (error) {
+            $('#status').text(error.message);
+        }
+    }; //delete
+
     const update = async () => {
         try {
             //set up a new client side instance of Employee
@@ -111,7 +154,7 @@
             emp.email = $("#TextBoxEmail").val();
             //we stored these 3 earlier
             emp.id = parseInt(sessionStorage.getItem("id"));
-            emp.departmentId = parseInt(sessionStorage.getItem("departmentId"));
+            emp.departmentId = parseInt($("#ddlDepartments").val());
             emp.timer = sessionStorage.getItem("timer");
             emp.picture64 = null;
 
@@ -157,10 +200,14 @@
         }
     }); //employeeList lick
 
+    $("#deletebutton").click(() => {
+        if (window.confirm("Are you sure"))
+            _delete();
+    });
 
     const buildEmployeeList = (data) => {
         $("#employeeList").empty();
-        div = $(`<div class="list-group-item text-white bg-secondary row d-flex" id="status">Employee Info</div>
+        div = $(`<div class="list-group-item text-white bg-info row d-flex" id="status">Employee Info</div>
                     <div class= "list-group-item row d-flex text-center" id="heading">
                     <div class="col-4 h4">Title</div>
                     <div class="col-4 h4">First</div>
@@ -172,9 +219,9 @@
         btn.appendTo($("#employeeList"));
         data.map(emp => {
             btn = $(`<button class="list-group-item row d-flex" id="${emp.id}">`);
-            btn.html(`<div class="col-4" id="studenttitle${emp.id}">${emp.title}</div>
-                      <div class="col-4" id="studentfirstname${emp.id}">${emp.firstname}</div>
-                      <div class="col-4" id="studentlastname${emp.id}">${emp.lastname}</div>`
+            btn.html(`<div class="col-4" id="employeetitle${emp.id}">${emp.title}</div>
+                      <div class="col-4" id="employeefirstname${emp.id}">${emp.firstname}</div>
+                      <div class="col-4" id="employeelastname${emp.id}">${emp.lastname}</div>`
             );
             btn.appendTo($("#employeeList"));
         }); //map

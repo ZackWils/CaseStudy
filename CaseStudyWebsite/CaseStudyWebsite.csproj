@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Controllers\DepartmentController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="wwwroot\Controllers\DepartmentController.cs" />
     <Compile Include="wwwroot\Controllers\EmployeeController.cs" />
   </ItemGroup>
 
